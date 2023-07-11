@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "boundary-controller.name" . }}-config
+  labels:
+    {{- include "boundary-controller.labels" . | nindent 4 }}
+data:
+  config.hcl: |
+
+    disable_mlock = true
+
+    controller {
+      name = "{{ include "boundary-controller.name" . }}"
+      description = "{{ .Values.config.description | default "A controller for Boundary"}}"
+      public_cluster_addr = "{{ .Values.config.public_cluster_ip }}:80"
+      database {
+          url = "{{ .Values.config.postgres_url }}"
+      }
+    }
+
+    listener "tcp" {
+      address = "0.0.0.0"
+      purpose = "api"
+
+      tls_disable = {{ .Values.config.api.tlsDisable }}
+      cors_enabled = true
+      cors_allowed_origins = ["*"]
+    }
+
+    listener "tcp" {
+      address = "0.0.0.0"
+      purpose = "cluster"
+    }
+
+    kms "awskms" {
+      purpose    = "root"
+      kms_key_id = "{{ .Values.config.kms.root }}"
+    }
+
+    kms "awskms" {
+      purpose    = "worker-auth"
+      kms_key_id = "{{ .Values.config.kms.worker }}"
+    }
+
+    kms "awskms" {
+      purpose    = "recovery"
+      kms_key_id = "{{ .Values.config.kms.recovery }}"
+    }
