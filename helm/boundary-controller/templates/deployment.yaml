@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "boundary-controller.fullname" . }}
+  labels:
+    {{- include "boundary-controller.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "boundary-controller.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "boundary-controller.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "boundary-controller.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          env:
+          {{- range .Values.image.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+          {{- end }} 
+          args: ["boundary database init -config /boundary/config.hcl && boundary database migrate -config /boundary/config.hcl && boundary server -config /boundary/config.hcl"]
+          # envFrom:
+          # - secretRef:
+          #     name: {{ .Values.config.environmentSecret }}
+          volumeMounts:
+          - mountPath: /boundary
+            name: {{ include "boundary-controller.name" . }}-config
+          ports:
+            - name: api
+              containerPort: 9200
+              protocol: TCP
+            - name: cluster
+              containerPort: 9201
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: api
+          readinessProbe:
+            httpGet:
+              path: /
+              port: api
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: {{ include "boundary-controller.name" . }}-config
+          configMap:
+            name: {{ include "boundary-controller.name" . }}-config
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

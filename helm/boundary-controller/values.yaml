@@ -1,0 +1,131 @@
+replicaCount: 1
+
+image:
+  repository: hashicorp/boundary
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  env: 
+    - name: BOUNDARY_POSTGRES_URL
+      value: "postgresql://postgres:xxxxxxxx@postgresql.boundary.svc.cluster.local:5432/postgres" 
+
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  api:
+    type: LoadBalancer
+    port: 80
+    annotations:
+      # service.beta.kubernetes.io/aws-load-balancer-internal: 'true'
+      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '60'
+      service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-west-3:405157225880:certificate/6e889e57-63a1-4332-b4f0-8214f434ec53
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+
+  cluster:
+    type: LoadBalancer
+    port: 80
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+      service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-xxxxxxxx,eipalloc-yyyyyyyy
+
+
+ingress:
+  api:
+    enabled: false
+    className: ""
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: boundary-api.padok.school
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+  cluster:
+    enabled: false
+    className: ""
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: boundary-cluster.padok.school
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+config:
+  # environmentSecret: boundary-credentials
+  description: "Boundary Playground Controller"
+  api:
+    scheme: https
+    tlsDisable: "true"
+    hostname: boundary-api.padok.school
+  cluster:
+  db:
+    maxOpenConnections: "5"
+  public_cluster_ip: "xx.xx.xx.xx"
+  postgres_url: "postgresql://postgres:xxxxxxxx@postgresql.boundary.svc.cluster.local:5432/postgres" 
+  kms:
+    root: "xxxxxxxx"
+    worker: "xxxxxxxx"
+    recovery: "xxxxxxxx"
