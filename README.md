@@ -1,7 +1,7 @@
 # Purpose
 This GitHub repository contains code for deploying a proof of concept of Vault as a credential broker for Boundary, with a PostgreSQL database as target.
 
-This article explains the code.
+This article explains the code: https://security.padok.fr/blog/vault-credential-broker 
 
 # Installation
 
