@@ -12,16 +12,16 @@ resource "random_password" "this" {
   special     = false
   upper       = true
   lower       = true
-  number      = true
+  numeric     = true
   min_lower   = 15
   min_upper   = 5
   min_numeric = 5
 }
 
 resource "random_string" "random" {
-  length           = 6
-  special          = false
-  upper            = false
+  length  = 6
+  special = false
+  upper   = false
 }
 
 # HERE
