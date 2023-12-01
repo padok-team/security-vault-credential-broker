@@ -2,7 +2,7 @@ module "rds" {
   source = "../../module/rds"
 
   providers = {
-    aws         = aws
+    aws = aws
   }
 
   ## GENERAL
@@ -27,9 +27,9 @@ module "rds" {
   }]
 
   ## NETWORK
-  subnet_ids         = local.vpc_private_subnets_ids
-  vpc_id             = local.vpc_id
-  security_group_ids = data.aws_security_groups.eks-node.ids
+  subnet_ids         = [aws_subnet.public_1.id, aws_subnet.public_2.id]
+  vpc_id             = aws_vpc.main.id
+  security_group_ids = [aws_eks_cluster.this.vpc_config[0].cluster_security_group_id]
 }
 
 data "aws_security_groups" "eks-node" {

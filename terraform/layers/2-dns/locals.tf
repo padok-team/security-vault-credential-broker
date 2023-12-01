@@ -1,5 +1,5 @@
 locals {
-  name                         = "poc-vcb"
+  name                         = "boundary-eks"
   env                          = "test"
   region                       = "eu-west-3"
   domain_name                  = "padok.school"
