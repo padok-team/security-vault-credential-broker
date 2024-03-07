@@ -8,5 +8,5 @@ locals {
   boundary_worker_domain_name  = "boundary-worker.${local.domain_name}"
   target_group_port            = "80"
   target_group_protocol        = "HTTP"
-  project                      = "padok_lab"
+  project                      = "padok_univ_2"
 }

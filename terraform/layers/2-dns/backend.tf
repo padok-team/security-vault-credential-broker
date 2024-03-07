@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    profile        = "padok_lab"
-    dynamodb_table = "poc-vcb-terraform-lock"
-    bucket         = "poc-vcb-terraform-state"
+    profile        = "padok_univ_2"
+    dynamodb_table = "poc-vcb-lib-terraform-lock"
+    bucket         = "poc-vcb-lib-terraform-state"
     key            = "dns/tfstate.json"
     region         = "eu-west-3"
   }

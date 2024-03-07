@@ -24,7 +24,7 @@ You should have all these tools installed:
 
 - Have a VPC with 2 subnets and an EKS cluster deployed on AWS
 
-- Create AWS profile "padok_univ_3" in ~/.aws/config, or if you want to use a profile of yours, search each occurence of "padok_univ_3" and replace them with your profile name
+- Create AWS profile "padok_univ_2" in ~/.aws/config, or if you want to use a profile of yours, search each occurence of "padok_univ_2" and replace them with your profile name
 
   - then `direnv allow`
 
@@ -40,11 +40,7 @@ You should have all these tools installed:
 
 ## 2. Backbone
 
-- Create RDS, EIP and KMS keys: in folder `terraform/layers/1-backbone`
-  - In file locals.tf:
-    - Replace local.name with your EKS cluster name
-    - Complete vpc_id and vpc_private_subnets_ids with your VPC information
-    - Complete node_group_iam_role_name with the name of the node group's iam role of your cluster
+- Create EKS, RDS, EIP and KMS keys: in folder `terraform/layers/1-backbone`
   - `terraform init`
   - `terraform apply`
 - Set up `kubectl` to use the newly deployed EKS cluster by running
