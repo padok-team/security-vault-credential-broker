@@ -2,7 +2,7 @@ locals {
   name                         = "boundary-eks"
   env                          = "test"
   region                       = "eu-west-3"
-  domain_name                  = "padok.school"
+  domain_name                  = "2.aws.padok.cloud"
   boundary_api_domain_name     = "boundary-api.${local.domain_name}"
   boundary_cluster_domain_name = "boundary-cluster.${local.domain_name}"
   boundary_worker_domain_name  = "boundary-worker.${local.domain_name}"

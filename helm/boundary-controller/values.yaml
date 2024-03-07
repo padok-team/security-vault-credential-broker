@@ -7,7 +7,7 @@ image:
   tag: ""
   env: 
     - name: BOUNDARY_POSTGRES_URL
-      value: "postgresql://postgres:xxxxxxxx@postgresql.boundary.svc.cluster.local:5432/postgres" 
+      value: "postgresql://postgres:xxxxxxx@postgresql.boundary.svc.cluster.local:5432/postgres" 
 
 
 imagePullSecrets: []
@@ -53,7 +53,7 @@ service:
     port: 80
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: nlb
-      service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-xxxxxxxx,eipalloc-yyyyyyyy
+      service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-05208e168dcc36449,eipalloc-0843aaa1ddc94e7f9
 
 
 ingress:
@@ -64,7 +64,7 @@ ingress:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: boundary-api.padok.school
+      - host: boundary-api.2.aws.padok.cloud
         paths:
           - path: /
             pathType: ImplementationSpecific
@@ -79,7 +79,7 @@ ingress:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: boundary-cluster.padok.school
+      - host: boundary-cluster.2.aws.padok.cloud
         paths:
           - path: /
             pathType: ImplementationSpecific
@@ -119,13 +119,13 @@ config:
   api:
     scheme: https
     tlsDisable: "true"
-    hostname: boundary-api.padok.school
+    hostname: boundary-api.2.aws.padok.cloud
   cluster:
   db:
     maxOpenConnections: "5"
-  public_cluster_ip: "xx.xx.xx.xx"
+  public_cluster_ip: "35.180.94.28"
   postgres_url: "postgresql://postgres:xxxxxxxx@postgresql.boundary.svc.cluster.local:5432/postgres" 
   kms:
-    root: "xxxxxxxx"
-    worker: "xxxxxxxx"
-    recovery: "xxxxxxxx"
+    root: "44cb3966-d56e-41ed-aa3f-b5db4cf112d9"
+    worker: "f823d8f1-be8d-4295-b130-57f9e447c9c5"
+    recovery: "a62f6df4-00b7-4eae-a0b9-d9c24c9f2a36"

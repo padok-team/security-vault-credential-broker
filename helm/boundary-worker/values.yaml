@@ -41,7 +41,7 @@ service:
   port: 80
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-type: nlb
-    service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-xxxxxxxx,eipalloc-yyyyyyyy
+    service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-0f94a5e24e556b640,eipalloc-0a9f4f82aef59a32e
 
 ingress:
   enabled: false
@@ -50,7 +50,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: "xx.xx.xx.xx"
+    - host: "35.180.148.178"
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -89,8 +89,8 @@ config:
     organization: "padok"
     type: "project"
     region: "europe-west1"
-  hostname: "xx.xx.xx.xx"
+  hostname: "35.180.148.178"
   controller:
-    ip: "xx.xx.xx.xx"
+    ip: "35.180.94.28"
   kms:
-    worker: "xxxxxxxx"
+    worker: "f823d8f1-be8d-4295-b130-57f9e447c9c5"

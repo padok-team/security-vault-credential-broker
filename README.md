@@ -30,7 +30,7 @@ You should have all these tools installed:
 
 - Login to AWS: `aws sso login`
 
-- Replace domain name with your domain name: search each occurence of "padok.school" and replace them with your domain name
+- Replace domain name with your domain name: search each occurence of "2.aws.padok.cloud" and replace them with your domain name
 
 ## 1. Bootstrap
 
@@ -178,20 +178,20 @@ kubectl port-forward svc/boundary-controller-api -n boundary 9200:80
 
 To log into Boundary (password: \$uper\$ecure):
 
-`boundary authenticate password -addr http://boundary-api.padok.school -auth-method-id <AUTH_METHOD_ID> -login-name jeff`
+`boundary authenticate password -addr http://boundary-api.2.aws.padok.cloud -auth-method-id <AUTH_METHOD_ID> -login-name jeff`
 
 To list organization:
 
-`boundary scopes list -addr http://boundary-api.padok.school`
+`boundary scopes list -addr http://boundary-api.2.aws.padok.cloud`
 
 To list projects in organization:
 
-`boundary scopes list -addr http://boundary-api.padok.school -scope-id <ORG_ID>`
+`boundary scopes list -addr http://boundary-api.2.aws.padok.cloud -scope-id <ORG_ID>`
 
 To list targets in project:
 
-`boundary targets list -addr http://boundary-api.padok.school -scope-id <PROJECT_ID>`
+`boundary targets list -addr http://boundary-api.2.aws.padok.cloud -scope-id <PROJECT_ID>`
 
 To connect to PostgreSQL target:
 
-`boundary connect postgres -target-id <TARGET_ID> -addr http://boundary-api.padok.school -dbname postgres`
+`boundary connect postgres -target-id <TARGET_ID> -addr http://boundary-api.2.aws.padok.cloud -dbname postgres`
