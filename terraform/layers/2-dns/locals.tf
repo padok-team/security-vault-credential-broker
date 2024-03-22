@@ -9,4 +9,5 @@ locals {
   target_group_port            = "80"
   target_group_protocol        = "HTTP"
   project                      = "padok_univ_2"
+  vault_domain_name            = "vault.${local.domain_name}"
 }

@@ -21,6 +21,11 @@ data "aws_lb" "nlb-boundary-api" {
   }
 }
 
+data "aws_elb" "lb-vault" {
+  name = "xxxxxx"
+}
+
+
 data "aws_route53_zone" "this" {
   name = local.domain_name
 }
@@ -54,6 +59,17 @@ resource "aws_route53_record" "boundary-api" {
   alias {
     name                   = data.aws_lb.nlb-boundary-api.dns_name 
     zone_id                = data.aws_lb.nlb-boundary-api.zone_id
+    evaluate_target_health = true
+  }
+}
+
+resource "aws_route53_record" "vault" {
+  zone_id = data.aws_route53_zone.this.zone_id
+  name    = local.vault_domain_name
+  type    = "A"
+  alias {
+    name                   = data.aws_elb.lb-vault.dns_name 
+    zone_id                = data.aws_elb.lb-vault.zone_id
     evaluate_target_health = true
   }
 }

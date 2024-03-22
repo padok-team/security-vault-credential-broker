@@ -1,4 +1,4 @@
 provider "vault" {
-    address = "http://127.0.0.1:8200"
+    address = "http://vault.2.aws.padok.cloud/"
     token = "hvs.xxxxxxxxx"
 }

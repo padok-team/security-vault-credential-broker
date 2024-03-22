@@ -119,12 +119,49 @@ helm install boundary-worker -n boundary . #in helm/boundary-worker
 - Populate RDS with these commands ($PG_URL is connexion url to RDS: postgresql://{user}:{password}@{rds_endpoint}:5432/postgres)
 
 ```bash
-$ psql -d $PG_URL -f northwind-database.sql
-$ psql -d $PG_URL -f northwind-roles.sql
+$ psql -d $PG_URL -f database.sql
+$ psql -d $PG_URL -f roles.sql
 ```
 
 ## 5. DNS
 
+### Ingress-controller
+
+Create an ingress-controller in your cluster
+  
+```bash
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+kubectl create namespace ingress-nginx
+helm install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx
+```
+
+Create the ingress for Vault :
+
+```bash
+kubectl apply -f ingress_vault.yaml
+```
+
+### Cert-manager
+
+Create a cert-manager in your cluster
+
+```bash
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.crds.yaml
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.12.0 \
+kubectl create --edit -f kube/cluster-issuer.yaml
+```
+
+### DNS layer
+
+- In AWS console, get the name of the Load Balancer created by the ingress-nginx and copy it in data.aws_elb.lb-vault.name (file : `2-dns/main.tf`)
+  
 - Apply the `2-dns` layer
 
 ## 6. Vault installation and configuration
@@ -133,7 +170,7 @@ $ psql -d $PG_URL -f northwind-roles.sql
 
 ```bash
 helm repo add hashicorp https://helm.releases.hashicorp.com
-helm install vault hashicorp/vault -n vault --create-namespace
+helm install vault hashicorp/vault -n vault --create-namespace --version 1.16.0
 ```
 
 - Initialize vault
